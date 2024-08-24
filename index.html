@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>小云芸加速</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background-color: #000000;
+            margin: 0;
+            font-family: Helvetica, sans-serif;
+            overflow: hidden;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        #info {
+            position: absolute;
+            width: 100%;
+            color: #ffffff;
+            padding: 5px;
+            font-family: Monospace;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1;
+        }
+
+        #menu {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+        .title{
+            position: absolute;
+            margin: 0px;
+            padding: 10px;
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+            border: 0px 1px solid rgba(127,255,255,0.25);
+            color: rgba(255,255,255,0.75);
+            background-color:rgba(0, 0, 0, 0.5) ;
+            backdrop-filter: blur(2px); /* 模糊效果 */
+            text-shadow: 0 0 10px rgba(0,255,255,0.95);
+            font-size: 5vh;
+            top: 0px;
+            width: 100%;
+            height: 8vh;
+            text-align: center;
+            z-index: 99999;
+        }
+        .download {
+            position: absolute;
+            width: 60%;
+            height: 50%;
+            text-align: center;
+            left: 20%;
+            top: 25%;
+            background-color:rgba(0, 0, 0, 0.5) ;
+            backdrop-filter: blur(5px); /* 模糊效果 */
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+            border: 0px 1px solid rgba(127,255,255,0.25);
+/*            background-color: rgba(0,255,255,0.2);*/
+        }
+        .download_button {
+            position: relative;
+            left: 0px;
+            width: 18%;
+            height: 30%;
+            font-size: 18px;
+        }
+        .slogan{
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 0 10px rgba(0,255,255,0.95);
+            font-size: 24px;
+            margin: 0px;
+            padding-bottom: 10px;
+        }
+
+
+
+
+        .download_title {
+            text-shadow: 0 0 10px rgba(0,255,255,0.95);
+            color: rgba(0,255,255,0.75);
+            position: relative;
+            text-align: center;
+            font-size: 4vh;
+            padding: 2vh;
+            color: rgba(255, 255, 255, 1.0);
+            margin: 0px;
+        }
+
+        .element {
+            width: 120px;
+            height: 160px;
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+            border: 1px solid rgba(127,255,255,0.25);
+            text-align: center;
+            cursor: default;
+        }
+
+        .element:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+
+        .element .number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: rgba(127,255,255,0.75);
+        }
+
+        .element .symbol {
+            position: absolute;
+            top: 40px;
+            left: 0px;
+            right: 0px;
+            font-size: 60px;
+            font-weight: bold;
+            color: rgba(255,255,255,0.75);
+            text-shadow: 0 0 10px rgba(0,255,255,0.95);
+        }
+
+        .element .details {
+            position: absolute;
+            bottom: 20px;
+            left: 0px;
+            right: 0px;
+            font-size: 16px;
+            color: rgba(127,255,255,0.75);
+        }
+
+        button {
+            color: rgba(127,255,255,0.75);
+            background: transparent;
+            outline: 1px solid rgba(127,255,255,0.75);
+            border: 0px;
+            padding: 0px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgba(0,255,255,0.5);
+            color: rgba(255,255,255,0.95);
+        }
+        button:active {
+            color: #000000;
+            background-color: rgba(0,255,255,0.75);
+        }
+        canvas {
+    position: absolute;
+    /*设置定位*/
+    top: 0;
+    left: 0;
+    z-index: -6;
+    /*使画布基于最低层*/
+    background: #000000;
+    /*画布背景色*/
+}
+.download_url{
+        font-size: 14px;
+        border-bottom: 1px solid #ffffff;
+        padding: 0px;
+        margin: 0px;
+        height: 50%;
+        text-align: center;
+        line-height: 7vh;
+        padding-top: 0px;
+    display: none;
+}
+.download_text{
+    display: block;
+}
+.foot {
+    position: fixed;
+    bottom: 10vh;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    margin-left: 20%;
+}
+
+.foot_logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.foot_logo img {
+    width: auto;
+    height: 60%;
+    max-width: 80px; /* 调整为合适的大小 */
+    object-fit: contain; /* 图片适应容器大小 */
+    opacity: 0.8;
+}
+/* 媒体查询：屏幕宽度小于 480px（通常是手机） */
+@media (max-width: 768px) {
+    .download {
+        position: relative;
+        width: 80%; /* 更小的屏幕上进一步调整宽度 */
+        left: 10%; /* 居中对齐 */
+        top: 15%; /* 更靠近顶部 */
+        padding: 0px; /* 调整内边距 */
+        height: 70%;
+    }
+    .foot {
+    position: fixed;
+    bottom: 2vh;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin-left: 10%;
+}
+    .download_button {
+        position: relative;
+        width: 90%;
+        height: 6vh;
+        font-size: 16px; /* 减小按钮字体大小 */
+        margin-bottom: 2vh; /* 减小按钮间距 */
+    }
+
+    .download_title {
+        margin: 0px;
+        text-shadow: 0 0 10px rgba(0,255,255,0.95);
+        color: rgba(255,255,255,0.75);
+        position: relative;
+        height: 10%;
+        text-align: center;
+        font-size: 4vh;
+        padding-top: 4vh;
+        color: rgba(255, 255, 255, 1.0);
+    }
+    .download_button2{
+        height: 12vh;
+    }
+    .download_url{
+        font-size: 14px;
+        border-bottom: 1px solid #ffffff;
+        padding: 0px;
+        margin: 0px;
+        height: 6vh;
+        line-height: 6vh;
+        text-align: center;
+        padding-top: 0px;
+    display: none;
+}
+}
+
+    </style>
+    <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    var buttons = document.querySelectorAll('.download_button');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+
+             // 移除所有按钮的 .download_button2 类
+            buttons.forEach(function(btn) {
+                btn.classList.remove('download_button2');
+                var downloadText = btn.querySelector('.download_text');
+                var downloadUrls = btn.querySelectorAll('.download_url');
+
+                if (downloadText) {
+                    downloadText.style.display = 'block';
+                }
+                downloadUrls.forEach(function(url) {
+                    url.style.display = 'none';
+                });
+            });
+
+            // 给当前点击的按钮添加 .download_button2 类
+            button.classList.add('download_button2');
+
+            buttons.forEach(function(btn) {
+                var downloadText = btn.querySelector('.download_text');
+                var downloadUrls = btn.querySelectorAll('.download_url');
+
+                if (btn !== button) {
+                    if (downloadText) {
+                        downloadText.style.display = 'block';
+                    }
+                    downloadUrls.forEach(function(url) {
+                        url.style.display = 'none';
+                    });
+                }
+            });
+
+            var currentDownloadText = button.querySelector('.download_text');
+            var currentDownloadUrls = button.querySelectorAll('.download_url');
+
+            if (currentDownloadText) {
+                currentDownloadText.style.display = 'none';
+            }
+
+            currentDownloadUrls.forEach(function(url) {
+                url.style.display = 'block';
+            });
+        });
+    });
+});
+    </script>
+</head>
+<body>
+<script src="js/three.min.js"></script>
+<script src="js/tween.min.js"></script>
+<script src="js/TrackballControls.js"></script>
+<script src="js/CSS3DRenderer.js"></script>
+<canvas id="starfield"></canvas>
+<div class="title">小云芸加速</div>
+<div id="container"></div>
+
+<div id="menu">
+    <button id="table">TABLE</button>
+    <button id="sphere">SPHERE</button>
+    <button id="helix">HELIX</button>
+    <button id="grid">GRID</button>
+</div>
+<div class="download">
+    <p class="download_title">下载</p>
+    <p class="slogan">免费试用15分钟</p>
+    <p class="slogan">29/月 &nbsp;99/年 &nbsp;159/两年</p>
+
+    <button class="download_button">
+        <p class="download_text">Android</p>
+        <a href="https://www.xiangyun88.xyz/download/android.apk"><p class="download_url">下载地址1</p></a>
+        <a href="https://github.com/feiniao361/xiaoyunyun/releases/download/1.0/android.apk"><p class="download_url">下载地址2</p></a>
+    </button>
+    <a href="https://testflight.apple.com/join/PSfwhWmh">
+        <button class="download_button">iPhone</button>
+    </a>
+    <button class="download_button">
+        <p class="download_text">Windows</p>
+        <a href="https://github.com/feiniao361/xiaoyunyun/releases/download/1.0/_1.0.0_x64-setup.exe"><p class="download_url">下载地址1</p></a>
+        <a href="https://www.xiangyun88.xyz/download/pc.exe"><p class="download_url">下载地址2</p></a>
+    </button>
+    <button class="download_button">
+        <p class="download_text">MAC(M系)</p>
+        <a href="https://www.xiangyun88.xyz/download/aarch64.dmg"><p class="download_url">下载地址1</p></a>
+        <a href="https://github.com/feiniao361/xiaoyunyun/releases/download/1.0/aarch64.dmg"><p class="download_url">下载地址2</p></a>
+    </button>
+</div>
+<div class="foot">
+    <div class="foot_logo"><img src="img/tk.png"></div>
+    <div class="foot_logo"><img src="img/y.jpeg"></div>
+    <div class="foot_logo"><img src="img/f.jpeg"></div>
+</div>
+
+<script>
+
+var table = [
+    "CN", "中国", "0 km", 1, 1,
+    "US", "美国", "12000 km", 18, 1,
+    "RU", "俄罗斯", "6000 km", 1, 2,
+    "IN", "印度", "3000 km", 2, 2,
+    "BR", "巴西", "17000 km", 13, 2,
+    "AU", "澳大利亚", "7500 km", 14, 2,
+    "CA", "加拿大", "10500 km", 15, 2,
+    "DE", "德国", "8000 km", 16, 2,
+    "JP", "日本", "2100 km", 17, 2,
+    "GB", "英国", "8300 km", 18, 2,
+    "FR", "法国", "8200 km", 1, 3,
+    "IT", "意大利", "8100 km", 2, 3,
+    "ES", "西班牙", "9300 km", 13, 3,
+    "ZA", "南非", "13000 km", 14, 3,
+    "NG", "尼日利亚", "11000 km", 15, 3,
+    "EG", "埃及", "8500 km", 16, 3,
+    "TR", "土耳其", "6900 km", 17, 3,
+    "IR", "伊朗", "5600 km", 18, 3,
+    "SA", "沙特", "6500 km", 1, 4,
+    "AR", "阿根廷", "19500 km", 2, 4,
+    "CO", "哥伦比亚", "16000 km", 3, 4,
+    "KE", "肯尼亚", "8700 km", 4, 4,
+    "DZ", "阿尔及利亚", "9000 km", 5, 4,
+    "TH", "泰国", "3300 km", 6, 4,
+    "VN", "越南", "2200 km", 7, 4,
+    "PK", "巴基斯坦", "4000 km", 8, 4,
+    "ID", "印尼", "4700 km", 9, 4,
+    "MX", "墨西哥", "12500 km", 10, 4,
+    "KR", "韩国", "2100 km", 11, 4,
+    "PL", "波兰", "7400 km", 12, 4,
+    "UA", "乌克兰", "6300 km", 13, 4,
+    "BD", "孟加拉", "2500 km", 14, 4,
+    "PH", "菲律宾", "3000 km", 15, 4,
+    "MY", "马来西亚", "3100 km", 16, 4,
+    "NL", "荷兰", "8200 km", 17, 4,
+    "SE", "瑞典", "7500 km", 18, 4,
+    "CH", "瑞士", "8500 km", 1, 5,
+    "NO", "挪威", "7600 km", 2, 5,
+    "FI", "芬兰", "6300 km", 3, 5,
+    "DK", "丹麦", "7400 km", 4, 5,
+    "BE", "比利时", "8300 km", 5, 5,
+    "IE", "爱尔兰", "8900 km", 6, 5,
+    "PT", "葡萄牙", "9400 km", 7, 5,
+    "AT", "奥地利", "7700 km", 8, 5,
+    "GR", "希腊", "7000 km", 9, 5,
+    "CZ", "捷克", "7700 km", 10, 5,
+    "HU", "匈牙利", "7200 km", 11, 5,
+    "RO", "罗马尼亚", "6900 km", 12, 5,
+    "BG", "保加利亚", "7400 km", 13, 5,
+    "HR", "克罗地亚", "7600 km", 14, 5,
+    "RS", "塞尔维亚", "7300 km", 15, 5,
+    "SK", "斯洛伐克", "7500 km", 16, 5,
+    "SI", "斯洛文尼亚", "7700 km", 17, 5,
+    "IS", "冰岛", "9700 km", 18, 5,
+    "NZ", "新西兰", "10500 km", 1, 6,
+    "CL", "智利", "18000 km", 2, 6,
+    "PE", "秘鲁", "17200 km", 3, 6,
+    "VE", "委内瑞拉", "15400 km", 4, 6,
+    "CU", "古巴", "14000 km", 5, 6,
+    "HT", "海地", "13700 km", 6, 6,
+    "JM", "牙买加", "14600 km", 7, 6,
+    "DO", "多米尼加", "14400 km", 8, 6,
+    "GT", "危地马拉", "14900 km", 9, 6,
+    "HN", "洪都拉斯", "14800 km", 10, 6,
+    "CR", "哥斯达黎加", "15300 km", 11, 6,
+    "PA", "巴拿马", "15800 km", 12, 6,
+    "UY", "乌拉圭", "18900 km", 13, 6,
+    "PY", "巴拉圭", "18300 km", 14, 6,
+    "BO", "玻利维亚", "17700 km", 15, 6,
+    "EC", "厄瓜多尔", "16800 km", 16, 6,
+    "BY", "白俄罗斯", "6300 km", 17, 6,
+    "KZ", "哈萨克斯坦", "3500 km", 18, 6,
+    "UZ", "乌兹别克斯坦", "3900 km", 4, 9,
+    "AZ", "阿塞拜疆", "4700 km", 5, 9,
+    "GE", "格鲁吉亚", "5000 km", 6, 9,
+    "AM", "亚美尼亚", "5400 km", 7, 9,
+    "KG", "吉尔吉斯斯坦", "4200 km", 8, 9,
+    "TJ", "塔吉克斯坦", "3900 km", 9, 9,
+    "TM", "土库曼斯坦", "4600 km", 10, 9,
+    "AF", "阿富汗", "3700 km", 11, 9,
+    "NP", "尼泊尔", "2600 km", 12, 9,
+    "LK", "斯里兰卡", "3400 km", 13, 9,
+    "MM", "缅甸", "2000 km", 14, 9,
+    "KH", "柬埔寨", "2300 km", 15, 9,
+    "LA", "老挝", "1600 km", 16, 9,
+    "MN", "蒙古", "2200 km", 17, 9,
+    "BT", "不丹", "2100 km", 18, 9,
+    "BD", "孟加拉", "2500 km", 1, 7,
+    "VN", "越南", "2200 km", 2, 7,
+    "TH", "泰国", "3300 km", 3, 7,
+    "MY", "马来西亚", "3100 km", 4, 7,
+    "SG", "新加坡", "3400 km", 5, 7,
+    "ID", "印尼", "4700 km", 6, 7,
+    "PH", "菲律宾", "3000 km", 7, 7,
+    "TW", "台湾", "1800 km", 8, 7,
+    "HK", "香港", "2000 km", 9, 7,
+    "MO", "澳门", "2000 km", 10, 7,
+    "KR", "韩国", "2100 km", 11, 7,
+    "KP", "朝鲜", "2100 km", 12, 7,
+    "JP", "日本", "2100 km", 13, 7,
+    "CN", "中国", "0 km", 14, 7,
+    "IN", "印度", "3000 km", 15, 7,
+    "PK", "巴基斯坦", "4000 km", 16, 7,
+    "IR", "伊朗", "5600 km", 17, 7,
+    "IQ", "伊拉克", "6900 km", 18, 7
+];
+    // 检测是否为移动设备
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    // 设置摄像机视角距离
+    var cameraDistance;
+    if (isMobile) {
+        cameraDistance = 6000; // 手机端的视角距离
+    } else {
+        cameraDistance = 3000; // 电脑端的视角距离
+    }
+    var camera, scene, renderer;
+    var controls;
+
+    var objects = [];
+    var targets = { table: [], sphere: [], helix: [], grid: [] };
+
+    init();
+    animate();
+
+    function init() {
+
+        camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+        //camera.position.z = 5000;
+        camera.position.z = cameraDistance; // 根据设备类型设置摄像机位置
+        console.log(cameraDistance);
+        scene = new THREE.Scene();
+
+
+
+
+
+
+
+        // table
+
+        for ( var i = 0; i < table.length; i += 5 ) {
+
+            var element = document.createElement( 'div' );
+            element.className = 'element';
+            element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
+
+            var number = document.createElement( 'div' );
+            number.className = 'number';
+            number.textContent = (i/5) + 1;
+            element.appendChild( number );
+
+            var symbol = document.createElement( 'div' );
+            symbol.className = 'symbol';
+            symbol.textContent = table[ i ];
+            element.appendChild( symbol );
+
+            var details = document.createElement( 'div' );
+            details.className = 'details';
+            details.innerHTML = table[ i + 1 ] + '<br>' + table[ i + 2 ];
+            element.appendChild( details );
+
+            var object = new THREE.CSS3DObject( element );
+            object.position.x = Math.random() * 4000 - 2000;
+            object.position.y = Math.random() * 4000 - 2000;
+            object.position.z = Math.random() * 4000 - 2000;
+            scene.add( object );
+
+            objects.push( object );
+
+            //
+
+            var object = new THREE.Object3D();
+            object.position.x = ( table[ i + 3 ] * 140 ) - 1330;
+            object.position.y = - ( table[ i + 4 ] * 180 ) + 990;
+
+            targets.table.push( object );
+
+        }
+
+        // sphere
+
+        var vector = new THREE.Vector3();
+
+        for ( var i = 0, l = objects.length; i < l; i ++ ) {
+
+            var phi = Math.acos( -1 + ( 2 * i ) / l );
+            var theta = Math.sqrt( l * Math.PI ) * phi;
+
+            var object = new THREE.Object3D();
+
+            object.position.x = 800 * Math.cos( theta ) * Math.sin( phi );
+            object.position.y = 800 * Math.sin( theta ) * Math.sin( phi );
+            object.position.z = 800 * Math.cos( phi );
+
+            vector.copy( object.position ).multiplyScalar( 2 );
+
+            object.lookAt( vector );
+
+            targets.sphere.push( object );
+
+        }
+
+        // helix
+
+        var vector = new THREE.Vector3();
+
+        for ( var i = 0, l = objects.length; i < l; i ++ ) {
+
+            var phi = i * 0.175 + Math.PI;
+
+            var object = new THREE.Object3D();
+
+            object.position.x = 900 * Math.sin( phi );
+            object.position.y = - ( i * 8 ) + 450;
+            object.position.z = 900 * Math.cos( phi );
+
+            vector.x = object.position.x * 2;
+            vector.y = object.position.y;
+            vector.z = object.position.z * 2;
+
+            object.lookAt( vector );
+
+            targets.helix.push( object );
+
+        }
+
+        // grid
+
+        for ( var i = 0; i < objects.length; i ++ ) {
+
+            var object = new THREE.Object3D();
+
+            object.position.x = ( ( i % 5 ) * 400 ) - 800;
+            object.position.y = ( - ( Math.floor( i / 5 ) % 5 ) * 400 ) + 800;
+            object.position.z = ( Math.floor( i / 25 ) ) * 1000 - 2000;
+
+            targets.grid.push( object );
+
+        }
+
+        //
+
+        renderer = new THREE.CSS3DRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.domElement.style.position = 'absolute';
+        document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+        //
+
+        controls = new THREE.TrackballControls( camera, renderer.domElement );
+        controls.rotateSpeed = 0.5;
+        controls.minDistance = 500;
+        controls.maxDistance = 6000;
+        controls.addEventListener( 'change', render );
+
+
+        var button = document.getElementById( 'table' );
+        button.addEventListener( 'click', function ( event ) {
+
+            transform( targets.table, 2000 );
+
+        }, false );
+
+        var button = document.getElementById( 'sphere' );
+        button.addEventListener( 'click', function ( event ) {
+
+            transform( targets.sphere, 2000 );
+
+        }, false );
+
+        var button = document.getElementById( 'helix' );
+        button.addEventListener( 'click', function ( event ) {
+
+            transform( targets.helix, 2000 );
+
+        }, false );
+
+        var button = document.getElementById( 'grid' );
+        button.addEventListener( 'click', function ( event ) {
+
+            transform( targets.grid, 2000 );
+
+        }, false );
+
+        transform( targets.table, 5000 );
+
+        //
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        function autoSwitchLayout() {
+    // 定义动画顺序
+    var sequences = [
+    { target: targets.sphere, duration: 4000 },
+        { target: targets.table, duration: 4000 },
+        
+        { target: targets.helix, duration: 4000 },
+        { target: targets.grid, duration: 4000 }
+    ];
+
+    // 当前动画索引
+    var currentSequenceIndex = 0;
+
+    // 动画执行函数
+    function nextAnimation() {
+        if (currentSequenceIndex < sequences.length) {
+            var sequence = sequences[currentSequenceIndex];
+            transform(sequence.target, sequence.duration);
+
+            // 设置下一个动画的延迟
+            setTimeout(nextAnimation, sequence.duration + 3000); // 动画时长 + 额外延迟
+            currentSequenceIndex++;
+        } else {
+            currentSequenceIndex = 0; // 重置索引，循环播放动画
+            setTimeout(nextAnimation, 3000); // 延迟后重新开始
+        }
+    }
+
+    // 开始动画
+    nextAnimation();
+}
+
+// 调用自动切换布局函数
+autoSwitchLayout();
+
+    }
+
+    function transform( targets, duration ) {
+
+        TWEEN.removeAll();
+
+        for ( var i = 0; i < objects.length; i ++ ) {
+
+            var object = objects[ i ];
+            var target = targets[ i ];
+
+            new TWEEN.Tween( object.position )
+                    .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
+                    .easing( TWEEN.Easing.Exponential.InOut )
+                    .start();
+
+            new TWEEN.Tween( object.rotation )
+                    .to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration )
+                    .easing( TWEEN.Easing.Exponential.InOut )
+                    .start();
+
+        }
+
+        new TWEEN.Tween( this )
+                .to( {}, duration * 2 )
+                .onUpdate( render )
+                .start();
+
+    }
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        render();
+
+    }
+
+    function animate() {
+
+        requestAnimationFrame( animate );
+
+        TWEEN.update();
+
+        controls.update();
+
+    }
+
+    function render() {
+
+        renderer.render( scene, camera );
+
+    }
+
+    var button = document.getElementById('android');
+    var downloads = document.querySelectorAll('.android_download');
+
+
+
+</script>
+<script type="text/javascript" src="js/bg.js"></script>
+</body>
+</html>
